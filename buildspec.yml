@@ -25,7 +25,7 @@
 #   pre_build:
 #       commands:
 #         - TAG="$REPOSITORY_NAME.$REPOSITORY_BRANCH.$ENVIRONMENT_NAME.$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
-#         - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' simple_jwt_api.yml
+#         - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' simple-jwt-api.yml
 #         - $(aws ecr get-login --no-include-email)
 #         - export KUBECONFIG=$HOME/.kube/config
 #   build:
@@ -36,8 +36,8 @@
 #     commands:
 #       - docker push $REPOSITORY_URI:$TAG
 #       - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --role-arn $EKS_KUBECTL_ROLE_ARN
-#       - kubectl apply -f simple_jwt_api.yml 
-#       - printf '[{"name":"simple_jwt_api","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
+#       - kubectl apply -f simple-jwt-api.yml 
+#       - printf '[{"name":"simple-jwt-api","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
 # artifacts:
 #   files: build.json
 
@@ -45,11 +45,12 @@
 #     parameter-store:         
 #       JWT_SECRET: JWT_SECRET
 
+
 version: 0.2
 phases:
   install:
     commands:
-      - curl -sS -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.15.10/2020-02-22/bin/linux/amd64/aws-iam-authenticator
+      - curl -sS -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.15.10/2020-02-22/bin/linux/amd64/aws-iam-authenticator #
       - curl -sS -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.15.10/2020-02-22/bin/linux/amd64/kubectl
       - chmod +x ./kubectl ./aws-iam-authenticator
       - export PATH=$PWD/:$PATH
@@ -75,7 +76,7 @@ phases:
       - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
       - echo $JWT_SECRET > .env
       - kubectl apply -f simple-jwt-api.yml
-      - printf '[{"name":"simple_jwt_api","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
+      - printf '[{"name":"simple-jwt-api","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
       - pwd
       - ls
 artifacts:
