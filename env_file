@@ -1,0 +1,2 @@
+ JWT_SECRET='08wep0ufsoiujeltcmjqtopiusjrgomjspmyhuiq308503860437iskfck'
+ LOG_LEVEL=DEBUG
