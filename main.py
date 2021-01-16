@@ -12,6 +12,9 @@ from flask import Flask, jsonify, request, abort
 
 
 JWT_SECRET = os.environ.get('JWT_SECRET', 'abc123abc1234')
+
+# create environment var LOG_LEVEL and set to DEBUG in order to see the logs
+# otherwise set it to INFO
 LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
 
 
@@ -34,6 +37,7 @@ def _logger():
 
 
 LOG = _logger()
+
 LOG.debug("Starting with log level: %s" % LOG_LEVEL )
 APP = Flask(__name__)
 
@@ -79,7 +83,7 @@ def auth():
 
     user_data = body
 
-    return jsonify(token=_get_jwt(user_data).decode('utf-8'))
+    return jsonify(token=_get_jwt(user_data))
 
 
 @APP.route('/contents', methods=['GET'])
